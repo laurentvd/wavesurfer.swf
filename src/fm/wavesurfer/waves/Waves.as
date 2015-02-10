@@ -1,10 +1,13 @@
 package fm.wavesurfer.waves {
-	import fm.wavesurfer.audio.events.LoadedEvent;
-	import fm.wavesurfer.jsapi.InitOptions;
-	import fm.wavesurfer.audio.Player;
+	import flash.display.Shape;
 	import fm.wavesurfer.audio.AudioData;
+	import fm.wavesurfer.audio.Player;
+	import fm.wavesurfer.audio.events.LoadedEvent;
+	import fm.wavesurfer.audio.events.ProgressEvent;
+	import fm.wavesurfer.jsapi.InitOptions;
 
 	import flash.display.Sprite;
+	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
 	/**
@@ -12,7 +15,9 @@ package fm.wavesurfer.waves {
 	 */
 	public class Waves extends Sprite {
 		
-		private var canvas : WaveCanvas;
+		private var wave : WaveCanvas;
+		private var progressWave : WaveCanvas;
+		private var progressWaveMask : Shape;
 		private var cursor : Cursor;
 		private var player : Player;
 		private var background : Background;
@@ -22,6 +27,7 @@ package fm.wavesurfer.waves {
 		
 		private var waveWidth : int;
 		private var waveHeight : int;
+		private var pixelsPerSecond : int;
 
 		/**
 		 * 
@@ -29,6 +35,7 @@ package fm.wavesurfer.waves {
 		public function Waves(player : Player) {
 			this.player = player;
 			this.player.addEventListener(LoadedEvent.TYPE, onAudioLoaded);
+			this.player.addEventListener(ProgressEvent.TYPE, onProgress);
 
 			setupVisuals();
 		}
@@ -37,12 +44,16 @@ package fm.wavesurfer.waves {
 		 * 
 		 */
 		private function setupVisuals() : void {
-			canvas = new WaveCanvas();
+			wave = new WaveCanvas();
+			progressWave = new WaveCanvas();
 			cursor = new Cursor();
 			background = new Background();
+			progressWaveMask = new Shape();
 			
 			addChild(background);
-			addChild(canvas);
+			addChild(wave);
+			addChild(progressWave);
+			addChild(progressWaveMask);
 			addChild(cursor);
 		}
 
@@ -53,6 +64,7 @@ package fm.wavesurfer.waves {
 			
 			waveWidth = stage.stageWidth;
 			waveHeight = stage.stageHeight;
+			stage.addEventListener(MouseEvent.CLICK, onStageClicked);
 			
 			this.options = options;
 			
@@ -63,34 +75,34 @@ package fm.wavesurfer.waves {
 		 * 
 		 */
 		public function loadAudio(audio : AudioData) : void {
-			var pixelsPerSecond : int = Math.ceil(waveWidth / (audio.getSound().length / 1000));
+			pixelsPerSecond = Math.ceil(waveWidth / (audio.getSound().length / 1000));
 			waveData = audio.asWaveData(pixelsPerSecond);
 			
-			trace(waveData.length);
+			// Draw the mask using the wave data count as the width. Every item is a pixel.
+			drawMask(waveData.length, waveHeight);
 			
-			drawWaves(waveData, options);
-			drawCursor(pixelsPerSecond, options);
+			wave.draw(waveData, options.waveColor, waveHeight);
+			progressWave.draw(waveData, options.waveProgressColor, waveHeight);
+			progressWave.mask = progressWaveMask;
+			
+			update(0);
 		}
 
 		/**
 		 * 
 		 */
-		public function update(progress : Number) : void {
-//			cursor.setTime(this.channel.position);
+		public function update(time : Number = 0) : void {
+			progressWaveMask.width = time * pixelsPerSecond;
+			cursor.draw(options.cursorColor, waveHeight, pixelsPerSecond, time);
 		}
-
+		
 		/**
 		 * 
 		 */
-		private function drawCursor(pixelsPerSecond : int, options : InitOptions, time : int = 0) : void {
-			cursor.draw(options.cursorColor, pixelsPerSecond, waveHeight);
-		}
-
-		/**
-		 * 
-		 */
-		private function drawWaves(data : Vector.<Point>, options : InitOptions, progress : int = 0) : void {
-			canvas.draw(data, options.waveColor, options.waveProgressColor, waveHeight, progress);
+		private function drawMask(width : Number, height : Number) : void {
+			progressWaveMask.graphics.beginFill(0xff00ff);
+			progressWaveMask.graphics.drawRect(0, 0, width, height);
+			progressWaveMask.graphics.endFill();
 		}
 		
 		/**
@@ -98,6 +110,25 @@ package fm.wavesurfer.waves {
 		 */
 		private function onAudioLoaded(event : LoadedEvent) : void {
 			loadAudio(event.getAudio());
+		}
+		
+		/**
+		 * 
+		 */
+		private function onStageClicked(event : MouseEvent) : void {
+			if (!waveData) {
+				return;
+			}
+			var position : Number = Math.min(event.stageX, waveData.length);
+			var percentage : Number = position / waveData.length;
+			player.seek(percentage);
+		}
+		
+		/**
+		 * 
+		 */
+		private function onProgress(event : ProgressEvent) : void {
+			update(event.getTime());
 		}
 	}
 }

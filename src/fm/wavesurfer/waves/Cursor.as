@@ -6,8 +6,8 @@ package fm.wavesurfer.waves {
 	 */
 	public class Cursor extends Sprite {
 
-		public function draw(color : uint, pixelsPerSecond : int, height : int, time : Number = 0) : void {
-			var pixel : int = Math.floor((time / 1000) * pixelsPerSecond);
+		public function draw(color : uint, height : int, pixelsPerSecond : int, time : Number = 0) : void {
+			var pixel : Number = time * pixelsPerSecond;
 			
 			graphics.clear();
 			graphics.lineStyle(1, color);

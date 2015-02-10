@@ -38,11 +38,12 @@ package fm.wavesurfer {
 			stage.align = StageAlign.TOP_LEFT;
 			
 			// Create elements
-			player = new Player();
+			player = new Player(stage);
 			waves = new Waves(player);
 			debugMessage = new DebugMessage();
 			addChild(waves);
 			addChild(debugMessage);
+			
 			api = new JavascriptAPI(player, waves, debugMessage);
 		}
 	}

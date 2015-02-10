@@ -43,12 +43,12 @@ package fm.wavesurfer.jsapi {
 			// TODO: Implement
 		}
 
-		public function getCurrentTime() : void {
-			// TODO: Implement
+		public function getCurrentTime() : Number {
+			return player.getCurrentTime();
 		}
 
-		public function getDuration() : void {
-			// TODO: Implement
+		public function getDuration() : Number {
+			return player.getDuration();
 		}
 
 		public function load(url : String) : void {
@@ -72,11 +72,11 @@ package fm.wavesurfer.jsapi {
 		}
 
 		public function pause() : void {
-			// TODO: Implement
+			player.pause();
 		}
 
 		public function play(start : Number = 0, end : Number = Number.MAX_VALUE) : void {
-			// TODO: Implement
+			player.play(start);
 		}
 
 		public function playPause() : void {
@@ -88,7 +88,7 @@ package fm.wavesurfer.jsapi {
 		}
 
 		public function seekTo(progress : Number) : void {
-			// TODO: Implement
+			player.seek(progress);
 		}
 
 		public function setFilter() : void {
