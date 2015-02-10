@@ -30,6 +30,8 @@ package fm.wavesurfer.waves {
 			left.graphics.lineStyle(1, progressColor);
 			right.graphics.lineStyle(1, progressColor);
 			
+			verticalRange = verticalRange / 2;
+			
 			var p : Point;
 			
 			for (var i : int = 0; i < wave.length; i++) {
@@ -41,7 +43,7 @@ package fm.wavesurfer.waves {
 					right.graphics.lineStyle(1, defaultColor);
 				}
 								
-				// draw lines connecting the minimum and maximum values of the left and right channels
+				// Draw lines connecting the minimum and maximum values of the left and right channels
 				// to their corresponding sprites.
 				left.graphics.moveTo(i, 0);
 				right.graphics.moveTo(i, verticalRange);

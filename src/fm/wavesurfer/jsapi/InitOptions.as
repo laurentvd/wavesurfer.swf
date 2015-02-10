@@ -10,19 +10,24 @@ package fm.wavesurfer.jsapi {
 		
 		public var waveProgressColor : uint = 0x0;
 		
-		public var backgroundColor : uint = 0xffffff;
-		
-		public var width : int = 900;
-		
-		public var height : int = 128;
+		public var backgroundColor : uint = 0xcccccc;
 		
 		public static function fromFlashVars(vars : Object) : InitOptions {
 			var options : InitOptions = new InitOptions();
+			
+			options.waveColor = vars['waveColor'] ? parseColor(vars['waveColor']) : options.waveColor;
+			options.cursorColor = vars['cursorColor'] ? parseColor(vars['cursorColor']) : options.waveColor;
+			options.waveProgressColor = vars['waveProgressColor'] ? parseColor(vars['waveProgressColor']) : options.waveColor;
+			options.backgroundColor = vars['backgroundColor'] ? parseColor(vars['backgroundColor']) : options.waveColor;
+			
 			return options;
 		}
 		
 		private static function parseColor(colorString : String) : uint {
 			colorString = colorString.replace( /[^0-9A-Fa-f]/g, '');
+			if (colorString.length === 3) {
+				colorString = colorString + colorString;
+			}
 			var color : uint = parseInt(colorString, 16);
 			if (isNaN(color)) {
 				return 0x0;

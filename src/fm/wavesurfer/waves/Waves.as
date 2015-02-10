@@ -14,9 +14,13 @@ package fm.wavesurfer.waves {
 		private var canvas : WaveCanvas;
 		private var cursor : Cursor;
 		private var player : Player;
+		private var background : Background;
 		
 		private var waveData : Vector.<Point>;
 		private var options : InitOptions;
+		
+		private var waveWidth : int;
+		private var waveHeight : int;
 
 		/**
 		 * 
@@ -33,6 +37,9 @@ package fm.wavesurfer.waves {
 		private function setupVisuals() : void {
 			canvas = new WaveCanvas();
 			cursor = new Cursor();
+			background = new Background();
+			
+			addChild(background);
 			addChild(canvas);
 			addChild(cursor);
 		}
@@ -40,11 +47,22 @@ package fm.wavesurfer.waves {
 		/**
 		 * 
 		 */
-		public function setup(audio : AudioData, options : InitOptions) : void {
+		public function setup(options : InitOptions) : void {
 			
-			var pixelsPerSecond : int = Math.ceil(options.width / (audio.getSound().length / 1000));
-			waveData = audio.asWaveData(pixelsPerSecond);
+			waveWidth = stage.stageWidth;
+			waveHeight = stage.stageHeight;
+			
 			this.options = options;
+			
+			background.draw(options.backgroundColor);
+		}
+		
+		/**
+		 * 
+		 */
+		public function loadAudio(audio : AudioData) : void {
+			var pixelsPerSecond : int = Math.ceil(waveWidth / (audio.getSound().length / 1000));
+			waveData = audio.asWaveData(pixelsPerSecond);
 			
 			drawWaves(waveData, options);
 			drawCursor(pixelsPerSecond, options);
@@ -61,14 +79,14 @@ package fm.wavesurfer.waves {
 		 * 
 		 */
 		private function drawCursor(pixelsPerSecond : int, options : InitOptions, time : int = 0) : void {
-			cursor.draw(options.cursorColor, pixelsPerSecond, options.height);
+			cursor.draw(options.cursorColor, pixelsPerSecond, waveHeight);
 		}
 
 		/**
 		 * 
 		 */
 		private function drawWaves(data : Vector.<Point>, options : InitOptions, progress : int = 0) : void {
-			canvas.draw(data, options.waveColor, options.waveProgressColor, options.height / 2, progress);
+			canvas.draw(data, options.waveColor, options.waveProgressColor, waveHeight, progress);
 		}
 	}
 }

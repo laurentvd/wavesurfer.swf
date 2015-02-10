@@ -1,6 +1,6 @@
 package fm.wavesurfer.jsapi {
-	import com.demonsters.debugger.MonsterDebugger;
 	import fm.wavesurfer.audio.Player;
+	import fm.wavesurfer.waves.Waves;
 
 	import flash.external.ExternalInterface;
 	import flash.system.Security;
@@ -8,18 +8,20 @@ package fm.wavesurfer.jsapi {
 	 * @author laurent
 	 */
 	public class JavascriptAPI {
-		
 		private var player : Player;
-		
-		public function JavascriptAPI(player : Player) {
+		private var waves : Waves;
+
+		public function JavascriptAPI(player : Player, waves : Waves) {
+			
+			this.player = player;
+			this.waves = waves;
+			
 			if (!ExternalInterface.available) {
 				return;
 			}
 			
 			// Allow calls to the player from any domain
 			Security.allowDomain('*');
-			
-			this.player = player;
 			
 			ExternalInterface.addCallback('init', init);
 			ExternalInterface.addCallback('destroy', destroy);
@@ -47,15 +49,13 @@ package fm.wavesurfer.jsapi {
 			ExternalInterface.addCallback('toggleInteraction', toggleInteraction);
 			ExternalInterface.addCallback('toggleScroll', toggleScroll);
 			
-			// Call
-			MonsterDebugger.log('READY CALLED');
+			// Callback to javascript
 			ExternalInterface.call('wavesurfer.flash.onReady');
-			MonsterDebugger.log('READY CALLED DONE');
 		}
 
 		public function init(options : Object) : void {
 			var initOptions : InitOptions = InitOptions.fromFlashVars(options);
-			MonsterDebugger.log(initOptions);
+			waves.setup(initOptions);
 		}
 
 		public function destroy() : void {

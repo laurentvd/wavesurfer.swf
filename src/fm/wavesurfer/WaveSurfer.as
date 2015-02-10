@@ -41,9 +41,9 @@ package fm.wavesurfer {
 			
 			// Create elements
 			player = new Player();
-			api = new JavascriptAPI(player);
 			waves = new Waves(player);
 			addChild(waves);
+			api = new JavascriptAPI(player, waves);
 		}
 	}
 }
