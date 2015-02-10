@@ -1,11 +1,15 @@
 package fm.wavesurfer.audio {
-	import flash.media.SoundChannel;
+	import fm.wavesurfer.audio.events.LoadErrorEvent;
 	import fm.wavesurfer.audio.events.LoadedEvent;
+
+	import flash.events.EventDispatcher;
+	import flash.media.SoundChannel;
 
 	/**
 	 * @author laurent
 	 */
-	public class Player {
+	public class Player extends EventDispatcher {
+		
 		private var loader : AudioLoader;
 		private var audio : AudioData;
 		private var currentSoundChannel : SoundChannel;
@@ -14,8 +18,9 @@ package fm.wavesurfer.audio {
 		public function Player() {
 			loader = new AudioLoader();
 			loader.addEventListener(LoadedEvent.TYPE, onAudioLoaded);
+			loader.addEventListener(LoadErrorEvent.TYPE, onAudioLoadError);
 		}
-
+		
 		public function load(url : String) : void {
 			reset();
 			loader.load(url);
@@ -40,6 +45,11 @@ package fm.wavesurfer.audio {
 
 		private function onAudioLoaded(event : LoadedEvent) : void {
 			audio = event.getAudio();
+			dispatchEvent(event);
+		}
+
+		private function onAudioLoadError(event : LoadErrorEvent) : void {
+			dispatchEvent(event);
 		}
 		
 		private function reset() : void {

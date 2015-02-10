@@ -1,4 +1,5 @@
 package fm.wavesurfer.waves {
+	import fm.wavesurfer.audio.events.LoadedEvent;
 	import fm.wavesurfer.jsapi.InitOptions;
 	import fm.wavesurfer.audio.Player;
 	import fm.wavesurfer.audio.AudioData;
@@ -27,7 +28,8 @@ package fm.wavesurfer.waves {
 		 */
 		public function Waves(player : Player) {
 			this.player = player;
-			
+			this.player.addEventListener(LoadedEvent.TYPE, onAudioLoaded);
+
 			setupVisuals();
 		}
 
@@ -64,6 +66,8 @@ package fm.wavesurfer.waves {
 			var pixelsPerSecond : int = Math.ceil(waveWidth / (audio.getSound().length / 1000));
 			waveData = audio.asWaveData(pixelsPerSecond);
 			
+			trace(waveData.length);
+			
 			drawWaves(waveData, options);
 			drawCursor(pixelsPerSecond, options);
 		}
@@ -87,6 +91,13 @@ package fm.wavesurfer.waves {
 		 */
 		private function drawWaves(data : Vector.<Point>, options : InitOptions, progress : int = 0) : void {
 			canvas.draw(data, options.waveColor, options.waveProgressColor, waveHeight, progress);
+		}
+		
+		/**
+		 * 
+		 */
+		private function onAudioLoaded(event : LoadedEvent) : void {
+			loadAudio(event.getAudio());
 		}
 	}
 }

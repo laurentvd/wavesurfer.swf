@@ -1,9 +1,8 @@
 package fm.wavesurfer {
 	import fm.wavesurfer.audio.Player;
+	import fm.wavesurfer.debugmessage.DebugMessage;
 	import fm.wavesurfer.jsapi.JavascriptAPI;
 	import fm.wavesurfer.waves.Waves;
-
-	import com.demonsters.debugger.MonsterDebugger;
 
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
@@ -17,8 +16,9 @@ package fm.wavesurfer {
 	public class WaveSurfer extends Sprite {
 		
 		private var waves : Waves;
-		private var player : fm.wavesurfer.audio.Player;
+		private var player : Player;
 		private var api : JavascriptAPI;
+		private var debugMessage : DebugMessage;
 		
 		public function WaveSurfer() {
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
@@ -26,8 +26,6 @@ package fm.wavesurfer {
 		
 		private function onAddedToStage(event : Event) : void {
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			
-			MonsterDebugger.initialize(this);
 			
 			init();
 		}
@@ -42,8 +40,10 @@ package fm.wavesurfer {
 			// Create elements
 			player = new Player();
 			waves = new Waves(player);
+			debugMessage = new DebugMessage();
 			addChild(waves);
-			api = new JavascriptAPI(player, waves);
+			addChild(debugMessage);
+			api = new JavascriptAPI(player, waves, debugMessage);
 		}
 	}
 }

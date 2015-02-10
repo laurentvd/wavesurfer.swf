@@ -21,5 +21,9 @@ package fm.wavesurfer.audio.events {
 		public function getAudio() : AudioData {
 			return audio;
 		}
+		
+		override public function clone() : Event {
+			return new LoadedEvent(audio);
+		}
 	}
 }

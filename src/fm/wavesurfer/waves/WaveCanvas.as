@@ -27,10 +27,11 @@ package fm.wavesurfer.waves {
 		 */
 		public function draw(wave : Vector.<Point>, defaultColor : uint, progressColor : uint, verticalRange : int, progress : int = 0) : void {
 			
+			verticalRange = verticalRange / 2;
+			
 			left.graphics.lineStyle(1, progressColor);
 			right.graphics.lineStyle(1, progressColor);
-			
-			verticalRange = verticalRange / 2;
+			left.y = verticalRange; 
 			
 			var p : Point;
 			

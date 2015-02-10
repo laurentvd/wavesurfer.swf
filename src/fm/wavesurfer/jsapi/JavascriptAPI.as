@@ -1,4 +1,6 @@
 package fm.wavesurfer.jsapi {
+	import fm.wavesurfer.audio.events.LoadErrorEvent;
+	import fm.wavesurfer.debugmessage.DebugMessage;
 	import fm.wavesurfer.audio.Player;
 	import fm.wavesurfer.waves.Waves;
 
@@ -10,47 +12,22 @@ package fm.wavesurfer.jsapi {
 	public class JavascriptAPI {
 		private var player : Player;
 		private var waves : Waves;
+		private var debugMessage : DebugMessage;
 
-		public function JavascriptAPI(player : Player, waves : Waves) {
+		public function JavascriptAPI(player : Player, waves : Waves, debugMessage : DebugMessage) {
 			
 			this.player = player;
 			this.waves = waves;
+			this.debugMessage = debugMessage;
 			
-			if (!ExternalInterface.available) {
-				return;
-			}
+			// Add listeners
+			player.addEventListener(LoadErrorEvent.TYPE, onLoadError);
 			
 			// Allow calls to the player from any domain
 			Security.allowDomain('*');
 			
-			ExternalInterface.addCallback('init', init);
-			ExternalInterface.addCallback('destroy', destroy);
-			ExternalInterface.addCallback('empty', empty);
-			ExternalInterface.addCallback('getCurrentTime', getCurrentTime);
-			ExternalInterface.addCallback('getDuration', getDuration);
-			ExternalInterface.addCallback('load', load);
-			ExternalInterface.addCallback('loadBlob', loadBlob);
-			ExternalInterface.addCallback('on', on);
-			ExternalInterface.addCallback('un', un);
-			ExternalInterface.addCallback('unAll', unAll);
-			ExternalInterface.addCallback('pause', pause);
-			ExternalInterface.addCallback('play', play);
-			ExternalInterface.addCallback('playPause', playPause);
-			ExternalInterface.addCallback('seekAndCenter', seekAndCenter);
-			ExternalInterface.addCallback('seekTo', seekTo);
-			ExternalInterface.addCallback('setFilter', setFilter);
-			ExternalInterface.addCallback('setPlaybackRate', setPlaybackRate);
-			ExternalInterface.addCallback('setVolume', setVolume);
-			ExternalInterface.addCallback('skip', skip);
-			ExternalInterface.addCallback('skipBackward', skipBackward);
-			ExternalInterface.addCallback('skipForward', skipForward);
-			ExternalInterface.addCallback('stop', stop);
-			ExternalInterface.addCallback('toggleMute', toggleMute);
-			ExternalInterface.addCallback('toggleInteraction', toggleInteraction);
-			ExternalInterface.addCallback('toggleScroll', toggleScroll);
-			
-			// Callback to javascript
-			ExternalInterface.call('wavesurfer.flash.onReady');
+			// Link to JS
+			setupExternalInterface();
 		}
 
 		public function init(options : Object) : void {
@@ -75,7 +52,7 @@ package fm.wavesurfer.jsapi {
 		}
 
 		public function load(url : String) : void {
-			// TODO: Implement
+			player.load(url);
 		}
 
 		public function loadBlob(url : String) : void {
@@ -152,6 +129,46 @@ package fm.wavesurfer.jsapi {
 
 		public function toggleScroll() : void {
 			// TODO: Implement
+		}
+		
+		private function onLoadError(event : LoadErrorEvent) : void {
+			debugMessage.error('Cannot load the supplied URL "' + event.getUrl() + '".');
+		}
+		
+		private function setupExternalInterface() : void {
+			if (!ExternalInterface.available) {
+				debugMessage.error('ExternalInterface not available, cannot start.');
+				return;
+			}
+			
+			ExternalInterface.addCallback('init', init);
+			ExternalInterface.addCallback('destroy', destroy);
+			ExternalInterface.addCallback('empty', empty);
+			ExternalInterface.addCallback('getCurrentTime', getCurrentTime);
+			ExternalInterface.addCallback('getDuration', getDuration);
+			ExternalInterface.addCallback('load', load);
+			ExternalInterface.addCallback('loadBlob', loadBlob);
+			ExternalInterface.addCallback('on', on);
+			ExternalInterface.addCallback('un', un);
+			ExternalInterface.addCallback('unAll', unAll);
+			ExternalInterface.addCallback('pause', pause);
+			ExternalInterface.addCallback('play', play);
+			ExternalInterface.addCallback('playPause', playPause);
+			ExternalInterface.addCallback('seekAndCenter', seekAndCenter);
+			ExternalInterface.addCallback('seekTo', seekTo);
+			ExternalInterface.addCallback('setFilter', setFilter);
+			ExternalInterface.addCallback('setPlaybackRate', setPlaybackRate);
+			ExternalInterface.addCallback('setVolume', setVolume);
+			ExternalInterface.addCallback('skip', skip);
+			ExternalInterface.addCallback('skipBackward', skipBackward);
+			ExternalInterface.addCallback('skipForward', skipForward);
+			ExternalInterface.addCallback('stop', stop);
+			ExternalInterface.addCallback('toggleMute', toggleMute);
+			ExternalInterface.addCallback('toggleInteraction', toggleInteraction);
+			ExternalInterface.addCallback('toggleScroll', toggleScroll);
+
+			// Callback to javascript
+			ExternalInterface.call('wavesurfer.flash.onReady');
 		}
 	}
 }
