@@ -46,6 +46,10 @@ package fm.wavesurfer.audio {
 				return;
 			}
 			
+			if (currentSoundChannel) {
+				currentSoundChannel.stop();
+			}
+			
 			// When no start time is supplied, check if we have a paused position
 			startTime = startTime ? startTime : lastSoundChannelPosition;
 			currentSoundChannel = audio.getSound().play(startTime);
