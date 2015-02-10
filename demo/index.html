@@ -10,16 +10,12 @@
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
 
-  </head>
-  <body>
-    <div id="wavesurfer-container">
-      Loading wavesurfer.swf...
-    </div>
-
     <script type="text/javascript">
+
       var wavesurfer = wavesurfer || {};
       wavesurfer.flash = {
         reference: null,
+        onEvent: function() {},
         onReady: function() {},
         init: function(options) {
           if (options.onReady) {
@@ -40,7 +36,18 @@
           swfobject.embedSWF('wavesurfer.swf', 'wavesurfer-container', '700', '192', '11.1.0', 'expressInstall.swf', flashvars, params, attributes, embedHandler);
         }
       };
+    </script>
 
+  </head>
+  <body>
+    <div id="wavesurfer-container">
+      Loading wavesurfer.swf...
+    </div>
+
+    <a href="javascript:wavesurfer.flash.reference.play();void(0);">Play</a>
+    <a href="javascript:wavesurfer.flash.reference.pause();void(0);">Pause</a>
+
+    <script type="text/javascript">
       wavesurfer.flash.init({
         onReady: function() {
           
