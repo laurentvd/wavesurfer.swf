@@ -3,6 +3,8 @@ package fm.wavesurfer {
 	import fm.wavesurfer.jsapi.JavascriptAPI;
 	import fm.wavesurfer.waves.Waves;
 
+	import com.demonsters.debugger.MonsterDebugger;
+
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
@@ -24,12 +26,12 @@ package fm.wavesurfer {
 		
 		private function onAddedToStage(event : Event) : void {
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			
+			MonsterDebugger.initialize(this);
+			
 			init();
 		}
-		
-		/**
-		 *
-		 */
+
 		private function init() : void {
 			
 			// Config stage

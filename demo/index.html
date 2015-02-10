@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <title>wavesurfer.swf demo</title>
+
+    <style type="text/css">
+      #wavesurfer {
+        border: 1px solid #000;
+      }
+    </style>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+
+  </head>
+  <body>
+    <div id="wavesurfer-container">
+      Loading wavesurfer.swf...
+    </div>
+
+    <script type="text/javascript">
+      var wavesurfer = wavesurfer || {};
+      wavesurfer.flash = {
+        reference: null,
+        onReady: function() {},
+        init: function(options) {
+          if (options.onReady) {
+            this.onReady = options.onReady;
+          }
+          this.embed();
+        },
+        embed: function() {
+          var flashvars = {
+            debug: true
+          };
+          var params = { allowScriptAccess: 'always' };
+          var attributes = { id: "wavesurfer", name: "wavesurfer" };
+          var embedHandler = function (e) {
+            wavesurfer.flash.reference = e.ref;
+          };
+
+          swfobject.embedSWF('wavesurfer.swf', 'wavesurfer-container', '700', '192', '11.1.0', 'expressInstall.swf', flashvars, params, attributes, embedHandler);
+        }
+      };
+
+      wavesurfer.flash.init({
+        onReady: function() {
+          wavesurfer.flash.reference.init({
+            waveColor: '#ccc',
+            cursorColor: '#ffccff',
+            waveProgressColor: '#fff',
+            backgroundColor: '#333'
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

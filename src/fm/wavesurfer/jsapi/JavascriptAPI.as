@@ -1,6 +1,9 @@
 package fm.wavesurfer.jsapi {
+	import com.demonsters.debugger.MonsterDebugger;
 	import fm.wavesurfer.audio.Player;
+
 	import flash.external.ExternalInterface;
+	import flash.system.Security;
 	/**
 	 * @author laurent
 	 */
@@ -12,6 +15,9 @@ package fm.wavesurfer.jsapi {
 			if (!ExternalInterface.available) {
 				return;
 			}
+			
+			// Allow calls to the player from any domain
+			Security.allowDomain('*');
 			
 			this.player = player;
 			
@@ -40,10 +46,16 @@ package fm.wavesurfer.jsapi {
 			ExternalInterface.addCallback('toggleMute', toggleMute);
 			ExternalInterface.addCallback('toggleInteraction', toggleInteraction);
 			ExternalInterface.addCallback('toggleScroll', toggleScroll);
+			
+			// Call
+			MonsterDebugger.log('READY CALLED');
+			ExternalInterface.call('wavesurfer.flash.onReady');
+			MonsterDebugger.log('READY CALLED DONE');
 		}
 
 		public function init(options : Object) : void {
-			// TODO: Implement
+			var initOptions : InitOptions = InitOptions.fromFlashVars(options);
+			MonsterDebugger.log(initOptions);
 		}
 
 		public function destroy() : void {
