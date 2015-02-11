@@ -26,41 +26,44 @@
 
 <script type="text/javascript">
 
-    /**
-     * Use whatever technology you like to embed the swf
-     */
-    var flashvars = {debug: true};
-    var params = {allowScriptAccess: 'always'};
-    var attributes = {};
+    (function() {
 
-    /**
-     * @param {Event} event
-     */
-    var onSwfEmbedded = function(event) {
-        setupWaveSurfer(e.ref);
-    };
-    swfobject.embedSWF('../dist/wavesurfer.swf', 'wavesurfer', '700', '192', '11.1.0', 'expressInstall.swf', flashvars, params, attributes, embedHandler);
+        /**
+         * We embed the SWF using SWFObject. However, it is not required to use SWFObject.
+         * You can use any method to embed the SWF
+         */
+        var flashvars = {debug: true};
+        var params = {allowScriptAccess: 'always'};
+        var attributes = {};
+        swfobject.embedSWF('../dist/wavesurfer.swf', 'wavesurfer', '700', '192', '11.1.0', 'expressInstall.swf', flashvars, params, attributes);
 
 
-    /**
-     * Once the swf is loaded, we can setup wavesurfer
-     */
-    var setupWaveSurfer = function(swfInstance) {
+        /**
+         * Once the swf is loaded and ready, we can setup wavesurfer
+         */
+        var setupWaveSurfer = function() {
+            var swfInstance = document.getElementById('wavesurfer');
 
-        // Setup the Flash display
-        swfInstance.init({
-            waveColor: '#ccc',
-            cursorColor: '#ffccff',
-            waveProgressColor: '#ffffff',
-            backgroundColor: '#333'
-        });
+            // Copy the instance to the global namespace for the purpose of this demo (html buttons)
+            window.waveSurferSwfInstance = swfInstance;
 
-        // Load the audio
-        swfInstance.load('audio/1.shostakovich.mp3');
+            // Setup the Flash display
+            swfInstance.init({
+                waveColor: '#ccc',
+                cursorColor: '#ffccff',
+                waveProgressColor: '#ffffff',
+                backgroundColor: '#333'
+            });
 
-        // Copy the instance to the global namespace for the purpose of this demo
-        window.waveSurferSwfInstance = swfInstance;
-    };
+            // Load the audio
+            swfInstance.load('audio/1.shostakovich.mp3');
+        };
+
+        /**
+         * Wait for the Flash to initialize
+         */
+        WaveSurfer.Swf.on('ready', setupWaveSurfer);
+    })();
 </script>
 </body>
 </html>

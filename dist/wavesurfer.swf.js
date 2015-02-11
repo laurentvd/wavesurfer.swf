@@ -2,27 +2,22 @@
 
 	'use strict';
 
-	var WaveSurferSwf = {
-		reference: null,
+	// Hook into the existing WaveSurfer object
+	WaveSurfer.Swf = {
 
 		/**
 		 * Invoked by the SWF once it has loaded and inited
+		 *
+		 * @return {void}
 		 */
 		swfIsReady: function() {
-
+			this.fireEvent('ready');
 		},
 
 		init: function(options) {
-			if (options.onReady) {
-				this.onReady = options.onReady;
-			}
-			this.embed();
-		},
-		embed: function() {
-
 		}
-	}
+	};
 
-	// Copy to the global scope
-	WaveSurfer.swf = WaveSurferSwf;
+	// Enable event listener on WaveSurfer.Swf
+	WaveSurfer.util.extend(WaveSurfer.Swf, WaveSurfer.Observer);
 })();

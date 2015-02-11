@@ -168,7 +168,7 @@ package fm.wavesurfer.jsapi {
 			ExternalInterface.addCallback('toggleScroll', toggleScroll);
 
 			// Callback to javascript
-			ExternalInterface.call('wavesurfer.flash.onReady');
+			ExternalInterface.call('WaveSurfer.Swf.swfIsReady');
 		}
 	}
 }

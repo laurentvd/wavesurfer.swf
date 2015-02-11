@@ -14,7 +14,7 @@ package fm.wavesurfer.debugmessage {
 		}
 		
 		public function error(message : String) : void {
-			getTextField().text += message + "\n";
+			getTextField().appendText(message + "\n");
 			getTextField().setTextFormat(getTextFormat());
 			trace(this, message);
 		}
