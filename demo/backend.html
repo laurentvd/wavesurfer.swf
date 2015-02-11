@@ -1,0 +1,54 @@
+<html>
+<head>
+    <title>wavesurfer.swf demo</title>
+
+    <script type="text/javascript" src="http://www.wavesurfer.fm/build/wavesurfer.min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+    <script type="text/javascript" src="../dist/wavesurfer.swf.js"></script>
+</head>
+<body>
+
+<div class="container">
+
+    <div id="wavesurfer-swf">
+        Loading wavesurfer.swf...
+    </div>
+
+    <div id="waveform"></div>
+</div>
+
+<script type="text/javascript">
+
+    (function() {
+
+        /**
+         * We embed the SWF using SWFObject. However, it is not required to use SWFObject.
+         * You can use any method to embed the SWF
+         */
+        var flashvars = {debug: true};
+        var params = {allowScriptAccess: 'always'};
+        var attributes = {};
+        swfobject.embedSWF('../dist/wavesurfer.swf', 'wavesurfer-swf', '1', '1', '11.1.0', 'expressInstall.swf', flashvars, params, attributes);
+
+
+        /**
+         * Once the swf is loaded and ready, we can setup wavesurfer
+         */
+        var setupWaveSurfer = function() {
+            var swfInstance = document.getElementById('wavesurfer-swf');
+            var wavesurfer = Object.create(WaveSurfer);
+            wavesurfer.init({
+                container: document.querySelector('#waveform'),
+                backend: 'MediaElement'
+            });
+            wavesurfer.load('audio/1.shostakovich.mp3');
+        };
+
+        /**
+         * Wait for the Flash to initialize
+         */
+        WaveSurfer.Swf.on('ready', setupWaveSurfer);
+    })();
+</script>
+</body>
+</html>

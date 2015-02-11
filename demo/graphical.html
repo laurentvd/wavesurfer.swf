@@ -3,7 +3,7 @@
     <title>wavesurfer.swf demo</title>
 
     <style type="text/css">
-        #wavesurfer {
+        #wavesurfer-swf {
             border: 1px solid #000;
         }
     </style>
@@ -16,7 +16,7 @@
 
 <div class="container">
 
-    <div id="wavesurfer">
+    <div id="wavesurfer-swf">
         Loading wavesurfer.swf...
     </div>
 
@@ -35,14 +35,14 @@
         var flashvars = {debug: true};
         var params = {allowScriptAccess: 'always'};
         var attributes = {};
-        swfobject.embedSWF('../dist/wavesurfer.swf', 'wavesurfer', '700', '192', '11.1.0', 'expressInstall.swf', flashvars, params, attributes);
+        swfobject.embedSWF('../dist/wavesurfer.swf', 'wavesurfer-swf', '700', '192', '11.1.0', 'expressInstall.swf', flashvars, params, attributes);
 
 
         /**
          * Once the swf is loaded and ready, we can setup wavesurfer
          */
         var setupWaveSurfer = function() {
-            var swfInstance = document.getElementById('wavesurfer');
+            var swfInstance = document.getElementById('wavesurfer-swf');
 
             // Copy the instance to the global namespace for the purpose of this demo (html buttons)
             window.waveSurferSwfInstance = swfInstance;
