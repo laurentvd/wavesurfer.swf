@@ -1,15 +1,7 @@
-# Build and Release Folders
-bin/
-bin-debug/
-bin-release/
-
-# Other files and folders
 .settings/
+.vagrant/
+Vagrantfile
 .idea/
 *.swf.stamp
 .DS_Store
 libs/
-
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
