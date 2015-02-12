@@ -6,7 +6,7 @@ package fm.wavesurfer.audio.events {
 	 */
 	public class LoadProgressEvent extends Event {
 		
-		public static const TYPE : String = 'fm.wavesurfer.audio.events.LoadErrorEvent';
+		public static const TYPE : String = 'fm.wavesurfer.audio.events.LoadProgressEvent';
 		
 		private var progress : Number;
 

@@ -83,7 +83,7 @@ package fm.wavesurfer.waves {
 			drawMask(waveData.length, waveHeight);
 			
 			wave.draw(waveData, options.waveColor, waveHeight);
-			progressWave.draw(waveData, options.waveProgressColor, waveHeight);
+			progressWave.draw(waveData, options.progressColor, waveHeight);
 			progressWave.mask = progressWaveMask;
 			
 			update(0);
@@ -94,7 +94,7 @@ package fm.wavesurfer.waves {
 		 */
 		public function update(time : Number = 0) : void {
 			progressWaveMask.width = time * samplesPerSecond;
-			cursor.draw(options.cursorColor, waveHeight, samplesPerSecond, time);
+			cursor.draw(options.cursorColor, options.cursorWidth, waveHeight, samplesPerSecond, time);
 		}
 		
 		/**

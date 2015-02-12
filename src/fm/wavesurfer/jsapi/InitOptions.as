@@ -8,17 +8,20 @@ package fm.wavesurfer.jsapi {
 		
 		public var cursorColor : uint = 0xff0000;
 		
-		public var waveProgressColor : uint = 0x0;
+		public var progressColor : uint = 0x0;
 		
 		public var backgroundColor : uint = 0xcccccc;
+		
+		public var cursorWidth : int = 1;
 		
 		public static function fromObject(vars : Object) : InitOptions {
 			var options : InitOptions = new InitOptions();
 			
 			options.waveColor = vars['waveColor'] ? parseColor(vars['waveColor']) : options.waveColor;
-			options.cursorColor = vars['cursorColor'] ? parseColor(vars['cursorColor']) : options.waveColor;
-			options.waveProgressColor = vars['waveProgressColor'] ? parseColor(vars['waveProgressColor']) : options.waveColor;
-			options.backgroundColor = vars['backgroundColor'] ? parseColor(vars['backgroundColor']) : options.waveColor;
+			options.cursorColor = vars['cursorColor'] ? parseColor(vars['cursorColor']) : options.cursorColor;
+			options.progressColor = vars['progressColor'] ? parseColor(vars['progressColor']) : options.progressColor;
+			options.backgroundColor = vars['backgroundColor'] ? parseColor(vars['backgroundColor']) : options.backgroundColor;
+			options.cursorWidth = vars['cursorWidth'] ? parseColor(vars['cursorWidth']) : options.cursorWidth;
 			
 			return options;
 		}

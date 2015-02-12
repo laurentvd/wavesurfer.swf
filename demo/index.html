@@ -21,6 +21,7 @@
 
     <a href="javascript:waveSurferInstance.play();void(0);">Play</a>
     <a href="javascript:waveSurferInstance.pause();void(0);">Pause</a>
+    <a href="javascript:console.log(waveSurferInstance.exportPCM());void(0);">Export PCM</a>
 </div>
 
 <script type="text/javascript">
@@ -77,8 +78,8 @@
             wavesurfer.load('/demo/audio/1.shostakovich.mp3');
 
             // Demonstrate some events
-            wavesurfer.on('pause', function() {
-               console.log('The audio was paused!');
+            wavesurfer.on('loading', function(progress) {
+               console.log('Loading progress: ' + progress);
             });
         };
 
