@@ -4,13 +4,13 @@ package fm.wavesurfer.jsapi {
 	 */
 	public class InitOptions {
 		
-		public var waveColor : uint = 0x666666;
+		public var waveColor : uint = 0x999999;
 		
-		public var cursorColor : uint = 0xff0000;
+		public var cursorColor : uint = 0x333333;
 		
-		public var progressColor : uint = 0x0;
+		public var progressColor : uint = 0x555555;
 		
-		public var backgroundColor : uint = 0xcccccc;
+		public var backgroundColor : uint = 0xffffff;
 		
 		public var cursorWidth : int = 1;
 		
@@ -29,7 +29,10 @@ package fm.wavesurfer.jsapi {
 		private static function parseColor(colorString : String) : uint {
 			colorString = colorString.replace( /[^0-9A-Fa-f]/g, '');
 			if (colorString.length === 3) {
-				colorString = colorString + colorString;
+				colorString = '';
+				for each (var digit : String in colorString.split('')) {
+					colorString += digit + digit;
+				}
 			}
 			var color : uint = parseInt(colorString, 16);
 			if (isNaN(color)) {
