@@ -22,6 +22,11 @@
     <a href="javascript:waveSurferInstance.play();void(0);">Play</a>
     <a href="javascript:waveSurferInstance.pause();void(0);">Pause</a>
     <a href="javascript:waveSurferInstance.seekTo(0.5);void(0);">Seek to 50%</a>
+
+    <p>
+        You cannot view the Flash version when running the demo from your local disk.
+        You need to run this demo on a webserver. This is a Flash security restriction.
+    </p>
 </div>
 
 <script type="text/javascript">
@@ -56,7 +61,7 @@
         /**
          * Invoked when either the js or swf version has inited
          *
-         * @param {WaveSurfer} wavesurfer
+         * @param {WaveSurfer|WaveSurfer.Swf} wavesurfer
          * @return {void}
          */
         function onWaveSurferInitialized(wavesurfer) {
