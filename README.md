@@ -20,11 +20,11 @@ to support modern browser which may not have Flash installed. I'm looking at you
 
 ## How to use
 
-Please refer to the demo folder for an example on how to implement wavesurfer.swf. Please
-keep in mind that you cannot view the Flash version when running from your local disk.
+Please refer to the demo folder for an example on how to implement wavesurfer.swf. Keep
+in mind that you cannot view the Flash version when running from your local disk.
 You need to run this demo on a webserver. This is a Flash security restriction.
 
-The API is similar to the js version, although not all methods and configuration options are
+The [API](#api) is similar to the js version, although not all methods and configuration options are
 supported at the moment. Here's a very brief example:
 
 ```javascript
@@ -64,7 +64,7 @@ Not all of the wavesurfer.js is currently supported. Below you'll find a list of
  * `getCurrentTime()` – Returns current progress in seconds.
  * `getDuration()` – Returns the duration of an audio clip in seconds.
  * `load(url)` – Loads audio from URL via XHR. Returns XHR object.
- * `on(eventName, callback)` – Subscribes to an event.  See [WaveSurfer Events](#wavesurfer-events) section below for a list.
+ * `on(eventName, callback)` – Subscribes to an event.  See [WaveSurfer Events](#supported-wavesurfer-events) section below for a list.
  * `un(eventName, callback)` – Unsubscribes from an event.
  * `unAll()` – Unsubscribes from all events.
  * `pause()` – Stops playback.
@@ -74,6 +74,7 @@ Not all of the wavesurfer.js is currently supported. Below you'll find a list of
  * `setVolume(newVolume)` – Sets the playback volume to a new value `[0..1]` (0 = silent, 1 = maximum).
  * `stop()` – Stops and goes to the beginning.
  * `toggleMute()` – Toggles the volume on and off.
+ * `exportPCM([samples])` – Get the PCM wave data as an array.
 
 ### Supported WaveSurfer Events
 
