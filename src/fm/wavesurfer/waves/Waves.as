@@ -1,11 +1,11 @@
 package fm.wavesurfer.waves {
-	import flash.display.Shape;
 	import fm.wavesurfer.audio.AudioData;
 	import fm.wavesurfer.audio.Player;
 	import fm.wavesurfer.audio.events.LoadedEvent;
 	import fm.wavesurfer.audio.events.ProgressEvent;
 	import fm.wavesurfer.jsapi.InitOptions;
 
+	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -27,7 +27,7 @@ package fm.wavesurfer.waves {
 		
 		private var waveWidth : int;
 		private var waveHeight : int;
-		private var pixelsPerSecond : int;
+		private var samplesPerSecond : int;
 
 		/**
 		 * 
@@ -75,8 +75,8 @@ package fm.wavesurfer.waves {
 		 * 
 		 */
 		public function loadAudio(audio : AudioData) : void {
-			pixelsPerSecond = Math.ceil(waveWidth / (audio.getSound().length / 1000));
-			waveData = audio.asWaveData(pixelsPerSecond);
+			samplesPerSecond = Math.floor(waveWidth / (audio.getSound().length / 1000));
+			waveData = audio.asWaveData(samplesPerSecond);
 			
 			// Draw the mask using the wave data count as the width. Every item is a pixel.
 			drawMask(waveData.length, waveHeight);
@@ -92,8 +92,8 @@ package fm.wavesurfer.waves {
 		 * 
 		 */
 		public function update(time : Number = 0) : void {
-			progressWaveMask.width = time * pixelsPerSecond;
-			cursor.draw(options.cursorColor, waveHeight, pixelsPerSecond, time);
+			progressWaveMask.width = time * samplesPerSecond;
+			cursor.draw(options.cursorColor, waveHeight, samplesPerSecond, time);
 		}
 		
 		/**

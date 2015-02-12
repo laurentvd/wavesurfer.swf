@@ -9,9 +9,11 @@ package fm.wavesurfer.audio {
 		
 		public static const SAMPLE_RATE : int = 44100;
 		private var sound : Sound;
+		private var cachedWaveData : Array;
 		
 		public function AudioData(sound : Sound) {
 			this.sound = sound;
+			this.cachedWaveData = new Array();
 		}
 		
 		public function asByteArray() : ByteArray {
@@ -21,9 +23,13 @@ package fm.wavesurfer.audio {
 			return data;
 		}
 		
-		public function asWaveData(pixelsPerSecond : int) : Vector.<Point> {
+		public function asWaveData(samplesPerSecond : int) : Vector.<Point> {
+			
+			if (cachedWaveData[samplesPerSecond]) {
+				return cachedWaveData[samplesPerSecond];
+			}
 					
-			var bytesPerRead : int = SAMPLE_RATE / pixelsPerSecond * 8;
+			var bytesPerRead : int = SAMPLE_RATE / samplesPerSecond * 8;
 			var xPos : uint = 0;
 			var leftMax : Number;
 			var rightMax : Number;
@@ -52,7 +58,21 @@ package fm.wavesurfer.audio {
 				xPos++;
 			}
 		
+			// Cache for later use 
+			cachedWaveData[samplesPerSecond] = wavePoints;
 			return wavePoints; 
+		}
+		
+		/**
+		 * The wave data is converted to mono to work with wavesurfer.js' exportPCM
+		 */
+		public function asSimplifiedWaveData(samplesPerSecond : int) : Array {
+			var samples : Vector.<Point> = asWaveData(samplesPerSecond);
+			var simplifiedSamples : Array = new Array();
+			for each (var sample : Point in samples) {
+				simplifiedSamples.push(Math.max(sample.x, sample.y));
+			}
+			return simplifiedSamples;
 		}
 	
 		public function getSound() : Sound {

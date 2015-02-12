@@ -12,7 +12,7 @@ package fm.wavesurfer.jsapi {
 		
 		public var backgroundColor : uint = 0xcccccc;
 		
-		public static function fromFlashVars(vars : Object) : InitOptions {
+		public static function fromObject(vars : Object) : InitOptions {
 			var options : InitOptions = new InitOptions();
 			
 			options.waveColor = vars['waveColor'] ? parseColor(vars['waveColor']) : options.waveColor;
