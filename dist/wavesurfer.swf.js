@@ -47,8 +47,10 @@
 		/**
 		 *
 		 */
-		play: function() {
-			this.instance.play();
+		play: function(start, end) {
+			start = start || 0;
+
+			this.instance.play(start);
 		},
 
 		/**
@@ -69,28 +71,28 @@
 		 *
 		 */
 		skipBackward: function() {
-			throw new Error('Not implemented in WaveSurfer.swf');
+			this._notImplemented();
 		},
 
 		/**
 		 *
 		 */
 		skipForward: function() {
-			throw new Error('Not implemented in WaveSurfer.swf');
+			this._notImplemented();
 		},
 
 		/**
 		 *
 		 */
 		skip: function() {
-			throw new Error('Not implemented in WaveSurfer.swf');
+			this._notImplemented();
 		},
 
 		/**
 		 *
 		 */
 		seekAndCenter: function() {
-			throw new Error('Not implemented in WaveSurfer.swf');
+			this._notImplemented();
 		},
 
 		/**
@@ -118,7 +120,7 @@
 		 *
 		 */
 		setPlaybackRate: function() {
-			throw new Error('Not implemented in WaveSurfer.swf');
+			this._notImplemented();
 		},
 
 		/**
@@ -132,14 +134,14 @@
 		 *
 		 */
 		toggleScroll: function() {
-			throw new Error('Not implemented in WaveSurfer.swf');
+			this._notImplemented();
 		},
 
 		/**
 		 *
 		 */
 		toggleInteraction: function() {
-			throw new Error('Not implemented in WaveSurfer.swf');
+			this._notImplemented();
 		},
 
 		/**
@@ -150,23 +152,32 @@
 		},
 
 		/**
-		 *
+		 * @param {Number} samples
 		 */
-		exportPCM: function() {
-			return this.instance.exportPCM();
+		exportPCM: function(samples) {
+			samples = samples || this.instance.offsetWidth;
+			return this.instance.exportPCM(samples);
 		},
 
 		/**
 		 *
 		 */
 		empty: function() {
-			throw new Error('Not implemented in WaveSurfer.swf');
+			this._notImplemented();
 		},
 
 		/**
 		 *
 		 */
 		destroy: function() {
+			this._notImplemented();
+		},
+
+		/**
+		 *
+		 * @private
+		 */
+		_notImplemented: function() {
 			throw new Error('Not implemented in WaveSurfer.swf');
 		}
 	};

@@ -9,8 +9,8 @@
         }
     </style>
 
-    <script type="text/javascript" src="http://www.wavesurfer.fm/build/wavesurfer.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+    <script type="text/javascript" src="http://www.wavesurfer.fm/build/wavesurfer.min.js"></script>
     <script type="text/javascript" src="../dist/wavesurfer.swf.js"></script>
 </head>
 <body>
@@ -21,7 +21,7 @@
 
     <a href="javascript:waveSurferInstance.play();void(0);">Play</a>
     <a href="javascript:waveSurferInstance.pause();void(0);">Pause</a>
-    <a href="javascript:console.log(waveSurferInstance.exportPCM());void(0);">Export PCM</a>
+    <a href="javascript:waveSurferInstance.seekTo(0.5);void(0);">Seek to 50%</a>
 </div>
 
 <script type="text/javascript">
@@ -31,7 +31,7 @@
         /**
          * If we do not need to use Flash for this, we won't!
          */
-        if (!WaveSurfer.WebAudio.supportsWebAudio()) {
+        if (WaveSurfer.WebAudio.supportsWebAudio()) {
 
             onWaveSurferInitialized(Object.create(WaveSurfer));
 
@@ -66,21 +66,20 @@
 
             // Setup wavesurfer
             wavesurfer.init({
-                waveColor: '#ccc',
-                cursorColor: '#ffccff',
-                waveProgressColor: '#ffffff',
-                backgroundColor: '#333', // Only used by Flash
+                waveColor: '#999999',
+                progressColor: '#ffffff',
+                cursorColor: '#ff0000',
+                cursorWidth: 2,
+                backgroundColor: '#333333', // Only used by Flash
                 container: document.getElementById('wavesurfer') // Only used by js version
             });
             wavesurfer.on('ready', function() {
                 wavesurfer.play();
             });
-            wavesurfer.load('/demo/audio/1.shostakovich.mp3');
-
-            // Demonstrate some events
-            wavesurfer.on('loading', function(progress) {
-               console.log('Loading progress: ' + progress);
+            wavesurfer.on('error', function(message) {
+                console.error(message);
             });
+            wavesurfer.load('audio/1.shostakovich.mp3');
         };
 
     })();
