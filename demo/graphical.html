@@ -3,8 +3,9 @@
     <title>wavesurfer.swf demo</title>
 
     <style type="text/css">
-        #wavesurfer-swf {
+        #wavesurfer {
             border: 1px solid #000;
+            background: #333;
         }
     </style>
 
@@ -16,12 +17,10 @@
 
 <div class="container">
 
-    <div id="wavesurfer-swf">
-        Loading wavesurfer.swf...
-    </div>
+    <div id="wavesurfer"></div>
 
-    <a href="javascript:waveSurferSwfInstance.play();void(0);">Play</a>
-    <a href="javascript:waveSurferSwfInstance.pause();void(0);">Pause</a>
+    <a href="javascript:waveSurferInstance.play();void(0);">Play</a>
+    <a href="javascript:waveSurferInstance.pause();void(0);">Pause</a>
 </div>
 
 <script type="text/javascript">
@@ -29,40 +28,60 @@
     (function() {
 
         /**
-         * We embed the SWF using SWFObject. However, it is not required to use SWFObject.
-         * You can use any method to embed the SWF
+         * If we do not need to use Flash for this, we won't!
          */
-        var flashvars = {debug: true};
-        var params = {allowScriptAccess: 'always'};
-        var attributes = {};
-        swfobject.embedSWF('../dist/wavesurfer.swf', 'wavesurfer-swf', '700', '192', '11.1.0', 'expressInstall.swf', flashvars, params, attributes);
+        if (!WaveSurfer.WebAudio.supportsWebAudio()) {
 
+            onWaveSurferInitialized(Object.create(WaveSurfer));
+
+        } else {
+
+            /**
+             * We embed the SWF using SWFObject. However, it is not required to use SWFObject.
+             * You can use any method to embed the SWF
+             */
+            swfobject.embedSWF('../dist/wavesurfer.swf', 'wavesurfer', '100%', '128', '11.1.0', 'expressInstall.swf', {}, {allowScriptAccess: 'always'}, {});
+
+            /**
+             * Wait for the Flash to initialize
+             */
+            WaveSurfer.Swf.on('init', function() {
+                var instance = document.getElementById('wavesurfer');
+                WaveSurfer.Swf.setInstance(instance)
+                onWaveSurferInitialized(WaveSurfer.Swf);
+            });
+        }
 
         /**
-         * Once the swf is loaded and ready, we can setup wavesurfer
+         * Invoked when either the js or swf version has inited
+         *
+         * @param {WaveSurfer} wavesurfer
+         * @return {void}
          */
-        var setupWaveSurfer = function() {
-            var swfInstance = document.getElementById('wavesurfer-swf');
+        function onWaveSurferInitialized(wavesurfer) {
 
             // Copy the instance to the global namespace for the purpose of this demo (html buttons)
-            window.waveSurferSwfInstance = swfInstance;
+            window.waveSurferInstance = wavesurfer;
 
-            // Setup the Flash display
-            swfInstance.init({
+            // Setup wavesurfer
+            wavesurfer.init({
                 waveColor: '#ccc',
                 cursorColor: '#ffccff',
                 waveProgressColor: '#ffffff',
-                backgroundColor: '#333'
+                backgroundColor: '#333', // Only used by Flash
+                container: document.getElementById('wavesurfer') // Only used by js version
             });
+            wavesurfer.on('ready', function() {
+                wavesurfer.play();
+            });
+            wavesurfer.load('/demo/audio/1.shostakovich.mp3');
 
-            // Load the audio
-            swfInstance.load('audio/1.shostakovich.mp3');
+            // Demonstrate some events
+            wavesurfer.on('pause', function() {
+               console.log('The audio was paused!');
+            });
         };
 
-        /**
-         * Wait for the Flash to initialize
-         */
-        WaveSurfer.Swf.on('ready', setupWaveSurfer);
     })();
 </script>
 </body>

@@ -2,6 +2,16 @@
 <head>
     <title>wavesurfer.swf demo</title>
 
+    <style type="text/css">
+        #wavesurfer-swf {
+            border: 1px solid #000;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+
     <script type="text/javascript" src="http://www.wavesurfer.fm/build/wavesurfer.min.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
     <script type="text/javascript" src="../dist/wavesurfer.swf.js"></script>
@@ -28,20 +38,25 @@
         var flashvars = {debug: true};
         var params = {allowScriptAccess: 'always'};
         var attributes = {};
-        swfobject.embedSWF('../dist/wavesurfer.swf', 'wavesurfer-swf', '1', '1', '11.1.0', 'expressInstall.swf', flashvars, params, attributes);
+        swfobject.embedSWF('/dist/wavesurfer.swf', 'wavesurfer-swf', '1', '1', '11.1.0', 'expressInstall.swf', flashvars, params, attributes);
 
 
         /**
          * Once the swf is loaded and ready, we can setup wavesurfer
          */
-        var setupWaveSurfer = function() {
-            var swfInstance = document.getElementById('wavesurfer-swf');
+        var setupWaveSurfer = function() {entById('wavesurfer-swf');
             var wavesurfer = Object.create(WaveSurfer);
+
+            console.log('This is called after loading the swf and wavesurfer.');
             wavesurfer.init({
-                container: document.querySelector('#waveform'),
-                backend: 'MediaElement'
+                container: document.getElementById('waveform')
             });
-            wavesurfer.load('audio/1.shostakovich.mp3');
+            console.log('This is never called in IE10 for some reason!');
+
+            wavesurfer.on('ready', function () {
+                wavesurfer.play();
+            });
+            wavesurfer.load('/demo/audio/1.shostakovich.mp3');
         };
 
         /**
