@@ -1,0 +1,25 @@
+{
+  "name": "wavesurfer.swf",
+  "version": "0.1.0",
+  "homepage": "https://github.com/laurentvd/wavesurfer.swf",
+  "authors": [
+    "Laurent van Dommelen <laurent.van.dommelen@gmail.com>"
+  ],
+  "description": "Flash fallback for wavesurfer.js",
+  "main": "dist/wavesurfer.swf.js",
+  "keywords": [
+    "wavesurfer",
+    "wave",
+    "mp3",
+    "audio",
+    "flash",
+    "waveform"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
