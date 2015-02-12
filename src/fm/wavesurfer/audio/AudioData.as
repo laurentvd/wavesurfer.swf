@@ -1,33 +1,38 @@
 package fm.wavesurfer.audio {
 	import flash.geom.Point;
-	import flash.utils.ByteArray;
 	import flash.media.Sound;
+	import flash.utils.ByteArray;
 	/**
 	 * @author laurent
 	 */
 	public class AudioData {
-		
+
+		/**
+		 * Whatever the actual sample rate of the mp3, flash will always convert it to 44.1Khz
+		 */		
 		public static const SAMPLE_RATE : int = 44100;
+
 		private var sound : Sound;
-		private var cachedWaveData : Array;
+		private var cachedByteArray : ByteArray;
 		
 		public function AudioData(sound : Sound) {
 			this.sound = sound;
-			this.cachedWaveData = new Array();
 		}
 		
 		public function asByteArray() : ByteArray {
+			if (cachedByteArray) {
+				cachedByteArray.position = 0;
+				return cachedByteArray;
+			}
+			
 			var data : ByteArray = new ByteArray();
 			sound.extract(data, Math.floor((sound.length / 1000) * SAMPLE_RATE));
 			data.position = 0;
+			cachedByteArray = data;
 			return data;
 		}
 		
 		public function asWaveData(samplesPerSecond : int) : Vector.<Point> {
-			
-			if (cachedWaveData[samplesPerSecond]) {
-				return cachedWaveData[samplesPerSecond];
-			}
 					
 			var bytesPerRead : int = SAMPLE_RATE / samplesPerSecond * 8;
 			var xPos : uint = 0;
@@ -57,9 +62,7 @@ package fm.wavesurfer.audio {
 				wavePoints.push(new Point(leftMax, rightMax));
 				xPos++;
 			}
-		
-			// Cache for later use 
-			cachedWaveData[samplesPerSecond] = wavePoints;
+
 			return wavePoints; 
 		}
 		

@@ -69,12 +69,13 @@ package fm.wavesurfer.waves {
 			this.options = options;
 			
 			background.draw(options.backgroundColor);
+			wave.drawFlat(options.waveColor, waveWidth, waveHeight);
 		}
 		
 		/**
 		 * 
 		 */
-		public function loadAudio(audio : AudioData) : void {
+		public function visualizeAudio(audio : AudioData) : void {
 			samplesPerSecond = Math.floor(waveWidth / (audio.getSound().length / 1000));
 			waveData = audio.asWaveData(samplesPerSecond);
 			
@@ -109,7 +110,7 @@ package fm.wavesurfer.waves {
 		 * 
 		 */
 		private function onAudioLoaded(event : LoadedEvent) : void {
-			loadAudio(event.getAudio());
+			visualizeAudio(event.getAudio());
 		}
 		
 		/**

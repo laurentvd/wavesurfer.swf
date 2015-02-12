@@ -52,5 +52,12 @@ package fm.wavesurfer.waves {
 			
 			cacheAsBitmap = true;			
 		}
+		
+		public function drawFlat(color : uint, width : Number, verticalRange : int) : void {
+			left.graphics.clear();
+			left.graphics.lineStyle(1, color);
+			left.graphics.moveTo(0, verticalRange / 2);
+			left.graphics.lineTo(width, verticalRange / 2);
+		}
 	}
 }

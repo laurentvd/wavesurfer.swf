@@ -1,4 +1,6 @@
 package fm.wavesurfer.audio {
+	import fm.wavesurfer.audio.events.LoadProgressEvent;
+	import fm.wavesurfer.audio.events.CompletedEvent;
 	import fm.wavesurfer.audio.events.LoadErrorEvent;
 	import fm.wavesurfer.audio.events.LoadedEvent;
 	import fm.wavesurfer.audio.events.PauseEvent;
@@ -35,6 +37,7 @@ package fm.wavesurfer.audio {
 			loader = new AudioLoader();
 			loader.addEventListener(LoadedEvent.TYPE, onAudioLoaded);
 			loader.addEventListener(LoadErrorEvent.TYPE, onAudioLoadError);
+			loader.addEventListener(LoadProgressEvent.TYPE, onAudioLoadProgress);
 		}
 
 		public function load(url : String) : void {
@@ -48,12 +51,12 @@ package fm.wavesurfer.audio {
 			}
 
 			if (isPlaying()) {
-				currentSoundChannel.stop();
+				_stop();
 			}
 
 			// When no start time is supplied, check if we have a paused position
 			startTime = startTime ? startTime : lastSoundChannelPosition;
-			currentSoundChannel = playFrom(startTime);
+			_play(startTime);
 
 			// Reset to zero for the next time it will be paused
 			lastSoundChannelPosition = 0;
@@ -66,22 +69,14 @@ package fm.wavesurfer.audio {
 			var time : Number = progress * getDuration();
 
 			if (isPlaying()) {
-				currentSoundChannel.stop();
-				currentSoundChannel = playFrom(time);
+				_stop();
+				_play(time);
 			} else {
 				lastSoundChannelPosition = time;
 			}
 
 			dispatchEvent(new SeekEvent(time));
 			dispatchProgressUpdate(time, getDuration());
-		}
-		
-		public function setVolume(newVolume : Number) : void {
-			currentSoundTransform.volume = newVolume;
-		}
-		
-		public function getVolume() : Number {
-			return currentSoundTransform.volume;
 		}
 
 		public function pause() : void {
@@ -92,8 +87,7 @@ package fm.wavesurfer.audio {
 			stage.removeEventListener(Event.ENTER_FRAME, onProgressUpdate);
 
 			lastSoundChannelPosition = getCurrentTime();
-			currentSoundChannel.stop();
-			currentSoundChannel = null;
+			_stop();
 
 			dispatchEvent(new PauseEvent());
 		}
@@ -106,7 +100,7 @@ package fm.wavesurfer.audio {
 			stage.removeEventListener(Event.ENTER_FRAME, onProgressUpdate);
 
 			lastSoundChannelPosition = 0;
-			currentSoundChannel.stop();
+			_stop();
 		}
 
 		public function isPlaying() : Boolean {
@@ -126,14 +120,35 @@ package fm.wavesurfer.audio {
 			}
 			return audio.getSound().length / 1000;
 		}
+		
+		public function setVolume(newVolume : Number) : void {
+			currentSoundTransform.volume = newVolume;
+		}
+		
+		public function getVolume() : Number {
+			return currentSoundTransform.volume;
+		}
 
 		public function getAudio() : AudioData {
 			return audio;
 		}
 		
-		private function playFrom(time : Number = 0) : SoundChannel {
+		private function _play(time : Number = 0) : SoundChannel {
 			var timeInMs : int = Math.round(time * 1000);
-			return audio.getSound().play(timeInMs, 0, currentSoundTransform);
+			
+			currentSoundChannel = audio.getSound().play(timeInMs, 0, currentSoundTransform);
+			currentSoundChannel.addEventListener(Event.SOUND_COMPLETE, onSoundCompleted);
+			return currentSoundChannel;
+		}
+		
+		private function _stop() : void {
+			if (!currentSoundChannel) {
+				return;
+			}
+
+			currentSoundChannel.removeEventListener(Event.SOUND_COMPLETE, onSoundCompleted);
+			currentSoundChannel.stop();
+			currentSoundChannel = null;
 		}
 
 		private function dispatchProgressUpdate(time : Number, duration : Number) : void {
@@ -144,6 +159,10 @@ package fm.wavesurfer.audio {
 			audio = event.getAudio();
 			dispatchEvent(event);
 		}
+		
+		private function onAudioLoadProgress(event : LoadProgressEvent) : void {
+			dispatchEvent(event);
+		}
 
 		private function onAudioLoadError(event : LoadErrorEvent) : void {
 			dispatchEvent(event);
@@ -152,13 +171,14 @@ package fm.wavesurfer.audio {
 		private function onProgressUpdate(event : Event = null) : void {
 			dispatchProgressUpdate(getCurrentTime(), getDuration());
 		}
+		
+		private function onSoundCompleted(event : Event) : void {
+			dispatchEvent(new CompletedEvent());
+		}
 
 		private function reset() : void {
 			audio = null;
-			if (currentSoundChannel) {
-				currentSoundChannel.stop();
-				currentSoundChannel = null;
-			}
+			_stop();
 		}
 	}
 }

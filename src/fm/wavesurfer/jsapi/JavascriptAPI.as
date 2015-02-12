@@ -1,4 +1,10 @@
 package fm.wavesurfer.jsapi {
+	import fm.wavesurfer.audio.events.LoadProgressEvent;
+	import fm.wavesurfer.audio.events.SeekEvent;
+	import fm.wavesurfer.audio.events.PlayEvent;
+	import fm.wavesurfer.audio.events.PauseEvent;
+	import fm.wavesurfer.audio.events.CompletedEvent;
+	import fm.wavesurfer.audio.events.LoadedEvent;
 	import fm.wavesurfer.audio.AudioData;
 	import fm.wavesurfer.audio.events.LoadErrorEvent;
 	import fm.wavesurfer.debugmessage.DebugMessage;
@@ -22,7 +28,13 @@ package fm.wavesurfer.jsapi {
 			this.debugMessage = debugMessage;
 			
 			// Add listeners
-			player.addEventListener(LoadErrorEvent.TYPE, onLoadError);
+			player.addEventListener(LoadErrorEvent.TYPE, onAudioLoadError);
+			player.addEventListener(LoadProgressEvent.TYPE, onAudioLoadProgress);
+			player.addEventListener(LoadedEvent.TYPE, onAudioLoaded);
+			player.addEventListener(CompletedEvent.TYPE, onCompleted);
+			player.addEventListener(PauseEvent.TYPE, onPaused);
+			player.addEventListener(PlayEvent.TYPE, onPlayed);
+			player.addEventListener(SeekEvent.TYPE, onSeeked);
 			
 			// Allow calls to the player from any domain
 			Security.allowDomain('*');
@@ -57,13 +69,13 @@ package fm.wavesurfer.jsapi {
 			player.play(start);
 		}
 		
-		public function exportPCM(samples : int = 1000) : Array {
+		public function exportPCM(samples : int) : Array {
 			var audio : AudioData = player.getAudio();
 			if (!audio) {
 				return [];
 			}
 			
-			return audio.asSimplifiedWaveData(samples);
+			return audio.asSimplifiedWaveData(samples / player.getDuration());
 		}
 
 		public function playPause() : void {
@@ -94,13 +106,15 @@ package fm.wavesurfer.jsapi {
 			player.setVolume(0);
 		}
 		
-		private function onLoadError(event : LoadErrorEvent) : void {
-			debugMessage.error('Cannot load the supplied URL "' + event.getUrl() + '".');
+		
+		private function triggerError(error : String) : void {
+			debugMessage.error(error);
+			fireEvent('error', error);
 		}
 		
 		private function setupExternalInterface() : void {
 			if (!ExternalInterface.available) {
-				debugMessage.error('ExternalInterface not available, cannot start.');
+				triggerError('ExternalInterface not available, cannot start.');
 				return;
 			}
 			
@@ -118,7 +132,42 @@ package fm.wavesurfer.jsapi {
 			ExternalInterface.addCallback('exportPCM', exportPCM);
 
 			// Callback to javascript
-			ExternalInterface.call('WaveSurfer.Swf.fireEvent', 'init');
+			fireEvent('init');
+		}
+		
+		private function fireEvent(name : String, data : * = null) : void {
+			if (!ExternalInterface.available) {
+				return;
+			}
+			ExternalInterface.call('WaveSurfer.Swf.fireEvent', name, data);
+		}
+
+		private function onSeeked(event : SeekEvent) : void {
+			fireEvent('seek', event.getTime() / player.getDuration());
+		}
+
+		private function onPlayed(event : PlayEvent) : void {
+			fireEvent('play');
+		}
+
+		private function onPaused(event : PauseEvent) : void {
+			fireEvent('pause');
+		}
+
+		private function onCompleted(event : CompletedEvent) : void {
+			fireEvent('finish');
+		}
+
+		private function onAudioLoaded(event : LoadedEvent) : void {
+			fireEvent('ready');
+		}
+
+		private function onAudioLoadProgress(event : LoadProgressEvent) : void {
+			fireEvent('loading', event.getProgress());
+		}
+		
+		private function onAudioLoadError(event : LoadErrorEvent) : void {
+			triggerError('Cannot load the supplied URL "' + event.getUrl() + '".');
 		}
 	}
 }
