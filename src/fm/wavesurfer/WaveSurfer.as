@@ -1,4 +1,5 @@
 package fm.wavesurfer {
+	import fm.wavesurfer.jsapi.FlashVarOptions;
 	import fm.wavesurfer.audio.Player;
 	import fm.wavesurfer.debugmessage.DebugMessage;
 	import fm.wavesurfer.jsapi.JavascriptAPI;
@@ -19,6 +20,7 @@ package fm.wavesurfer {
 		private var player : Player;
 		private var api : JavascriptAPI;
 		private var debugMessage : DebugMessage;
+		private var flashVars : FlashVarOptions;
 		
 		public function WaveSurfer() {
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
@@ -41,10 +43,11 @@ package fm.wavesurfer {
 			player = new Player(stage);
 			waves = new Waves(player);
 			debugMessage = new DebugMessage();
+			flashVars = FlashVarOptions.fromObject(stage.loaderInfo.parameters);
 			addChild(waves);
 			addChild(debugMessage);
 			
-			api = new JavascriptAPI(player, waves, debugMessage);
+			api = new JavascriptAPI(player, waves, debugMessage, flashVars);
 		}
 	}
 }
