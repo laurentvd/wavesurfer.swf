@@ -63,7 +63,7 @@ Not all of the wavesurfer.js is currently supported. Below you'll find a list of
  * `init(options)` – Initializes with the options listed above.
  * `getCurrentTime()` – Returns current progress in seconds.
  * `getDuration()` – Returns the duration of an audio clip in seconds.
- * `load(url)` – Loads audio from URL via XHR. Returns XHR object.
+ * `load(url)` – Loads audio from URL.
  * `on(eventName, callback)` – Subscribes to an event.  See [WaveSurfer Events](#supported-wavesurfer-events) section below for a list.
  * `un(eventName, callback)` – Unsubscribes from an event.
  * `unAll()` – Unsubscribes from all events.
@@ -78,9 +78,10 @@ Not all of the wavesurfer.js is currently supported. Below you'll find a list of
 
 ### Supported WaveSurfer Events
 
+ * `init` – The SWF has loaded and is ready to init.
  * `error` – Occurs on error.  Callback will receive (string) error message.
  * `finish` – When it finishes playing.
- * `loading` – Fires continuously when loading via XHR or drag'n'drop. Callback will receive (integer) loading progress in percents [0..100] and (object) event target.
+ * `loading` – Fires continuously when loading. Callback will receive (integer) loading progress in percents [0..100].
  * `pause` – When audio is paused.
  * `play` – When play starts.
  * `ready` – When audio is loaded, decoded and the waveform drawn.
