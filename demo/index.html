@@ -36,9 +36,10 @@
         /**
          * If we do not need to use Flash for this, we won't!
          */
-        if (WaveSurfer.WebAudio.supportsWebAudio()) {
+        if (WaveSurfer.Swf.supportsAudioContext() && WaveSurfer.Swf.supportsCanvas()) {
 
-            onWaveSurferInitialized(Object.create(WaveSurfer));
+            var waveSurfer = Object.create(WaveSurfer);
+            onWaveSurferInitialized(waveSurfer);
 
         } else {
 
@@ -51,10 +52,9 @@
             /**
              * Wait for the Flash to initialize
              */
-            WaveSurfer.Swf.on('init', function() {
-                var instance = document.getElementById('wavesurfer');
-                WaveSurfer.Swf.setInstance(instance)
-                onWaveSurferInitialized(WaveSurfer.Swf);
+            var waveSurfer = new WaveSurfer.Swf();
+            waveSurfer.on('init', function() {
+                onWaveSurferInitialized(waveSurfer);
             });
         }
 
