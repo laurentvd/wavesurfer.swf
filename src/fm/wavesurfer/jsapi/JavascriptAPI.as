@@ -146,23 +146,23 @@ package fm.wavesurfer.jsapi {
 
 			switch (args.length) {
 				case 0:
-					ExternalInterface.call(functionPath, name, flashVars.id);
+					ExternalInterface.call(functionPath, flashVars.id, name);
 					return;
 				case 1:
-					ExternalInterface.call(functionPath, name, flashVars.id, args[0]);
+					ExternalInterface.call(functionPath, flashVars.id, name, args[0]);
 					return;
 				case 2:
-					ExternalInterface.call(functionPath, name, flashVars.id, args[0], args[1]);
+					ExternalInterface.call(functionPath, flashVars.id, name, args[0], args[1]);
 					return;
 				case 3:
-					ExternalInterface.call(functionPath, name, flashVars.id, args[0], args[1], args[2]);
+					ExternalInterface.call(functionPath, flashVars.id, name, args[0], args[1], args[2]);
 					return;
 				case 4:
-					ExternalInterface.call(functionPath, name, flashVars.id, args[0], args[1], args[2], args[3]);
+					ExternalInterface.call(functionPath, flashVars.id, name, args[0], args[1], args[2], args[3]);
 					return;
 				case 5:
 				default:
-					ExternalInterface.call(functionPath, name, flashVars.id, args[0], args[1], args[2], args[3], args[4]);
+					ExternalInterface.call(functionPath, flashVars.id, name, args[0], args[1], args[2], args[3], args[4]);
 					return;
 			}
 		}
