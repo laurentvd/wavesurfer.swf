@@ -2,14 +2,14 @@
 
 	'use strict';
 
-	// Hook into the existing WaveSurfer object
-	window.WaveSurfer = WaveSurfer || {};
-
 	/**
-	 * @param {String} id
+	 * @param {String} [id]
 	 * @constructor
 	 */
 	WaveSurfer.Swf = function(id) {
+		if (!id) {
+			id = 'wavesurfer';
+		}
 		this.id = id;
 
 		// Add this instance to the list so fireEvent can be directed to the correct instance
@@ -217,6 +217,23 @@
 		 * Contains all WaveSurfer.Swf instances
 		 */
 		instances: {},
+
+		/**
+		 * @return {Boolean}
+		 * @private
+		 */
+		supportsAudioContext: function() {
+			return !!(window.AudioContext || window.webkitAudioContext);
+		},
+
+		/**
+		 * @returns {boolean}
+		 * @private
+		 */
+		supportsCanvas: function() {
+			var elem = document.createElement('canvas');
+			return !!(elem.getContext && elem.getContext('2d'));
+		},
 
 		/**
 		 *
