@@ -4,19 +4,32 @@
 
 	// Hook into the existing WaveSurfer object
 	window.WaveSurfer = WaveSurfer || {};
-	WaveSurfer.Swf = {
+
+	/**
+	 * @param {String} id
+	 * @constructor
+	 */
+	WaveSurfer.Swf = function(id) {
+		this.id = id;
+
+		// Add this instance to the list so fireEvent can be directed to the correct instance
+		WaveSurfer.Swf.instances[id] = this;
+	};
+	WaveSurfer.Swf.prototype = {
 
 		/**
 		 * Reference to the loaded swf file
+		 *
+		 * @type {Element}
 		 */
 		instance: null,
 
 		/**
-		 * @param {Node} instance
+		 * The Id that was passed when creating this object
+		 *
+		 * @type {String}
 		 */
-		setInstance: function(instance) {
-			this.instance = instance;
-		},
+		id: 'wavesurfer',
 
 		/**
 		 * @param {Object} options
@@ -27,6 +40,9 @@
 			// Clear container reference, causes Flash to hang
 			options.container = null;
 
+			if (!this.instance) {
+				this.instance = document.getElementById(this.id);
+			}
 			this.instance.init(options);
 		},
 
@@ -175,6 +191,13 @@
 
 		/**
 		 *
+		 */
+		getId: function() {
+			return this.id;
+		},
+
+		/**
+		 *
 		 * @private
 		 */
 		_notImplemented: function() {
@@ -183,5 +206,39 @@
 	};
 
 	// Enable event listener on WaveSurfer.Swf
-	WaveSurfer.util.extend(WaveSurfer.Swf, WaveSurfer.Observer);
+	WaveSurfer.util.extend(WaveSurfer.Swf.prototype, WaveSurfer.Observer);
+
+	/**
+	 * Merge the 'static' properties to enable instance resolving
+	 */
+	WaveSurfer.util.extend(WaveSurfer.Swf, {
+
+		/**
+		 * Contains all WaveSurfer.Swf instances
+		 */
+		instances: {},
+
+		/**
+		 *
+		 * @param {String} id
+		 * @return {WaveSurfer.Swf}
+		 */
+		getInstanceById: function(id) {
+			return WaveSurfer.Swf.instances[id];
+		},
+
+		/**
+		 * Fire an event on the instance with the supplied id
+		 * @param {String} id
+		 * @param {String} eventName
+		 */
+		fireEvent: function(id, eventName) {
+			var args = Array.prototype.slice.call(arguments, 1);
+			var instance = WaveSurfer.Swf.getInstanceById(id);
+
+			//console.log(instance);
+			WaveSurfer.Observer.fireEvent.apply(instance, args);
+		}
+	});
+
 })();
