@@ -163,7 +163,7 @@ package fm.wavesurfer.jsapi {
 		}
 
 		private function onAudioLoadProgress(event : LoadProgressEvent) : void {
-			fireEvent('loading', event.getProgress());
+			fireEvent('loading', Math.round(100 * event.getProgress()));
 		}
 		
 		private function onAudioLoadError(event : LoadErrorEvent) : void {
