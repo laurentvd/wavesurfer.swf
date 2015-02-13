@@ -14,9 +14,8 @@ lack the required WebAudio support.
 
 ## Requirements
 
-Wavesurfer.swf has no requirements. Not even wavesurfer.js! However, we use SWFObject
-the demo to embed the SWF on to the page. Also, you probably want wavesurfer.js
-to support modern browser which may not have Flash installed. I'm looking at you !
+Wavesurfer.swf has no requirements apart from wavesurfer.js! However, we use SWFObject
+the demo to embed the SWF on to the page.
 
 ## How to use
 
@@ -28,18 +27,22 @@ The [API](#api) is similar to the js version, although not all methods and confi
 supported at the moment. Here's a very brief example:
 
 ```javascript
+var wavesurfer = new WaveSurfer.Swf('myFlashContainerid');
+
 // ... embed the SWF on the page using any method you like
-var wavesurfer = WaveSurfer.Swf;
 
-// Point wavesurfer.swf to your embedded swf
-wavesurfer.setInstance(document.getElementById('myWaveSurferSwf'));
+// Wait for the swf to initialize
+wavesurfer.on('init', function() {
 
-// Initialize with your own configuration object
-wavesurfer.init({
-    waveColor: '#999999',
-    ...
+    // Initialize with your own configuration object
+    wavesurfer.init({
+        waveColor: '#999999',
+        ...
+    });
+
+    // And load the mp3 file
+    wavesurfer.load('Rick_Astley.mp3');
 });
-wavesurfer.load('Rick_Astley.mp3');
 ```
 
 For more examples, please refer to the readme of [wavesurfer.js](https://github.com/katspaugh/wavesurfer.js).
@@ -63,6 +66,7 @@ Not all of the wavesurfer.js is currently supported. Below you'll find a list of
  * `init(options)` – Initializes with the options listed above.
  * `getCurrentTime()` – Returns current progress in seconds.
  * `getDuration()` – Returns the duration of an audio clip in seconds.
+ * `getId()` – Get the id
  * `load(url)` – Loads audio from URL.
  * `on(eventName, callback)` – Subscribes to an event.  See [WaveSurfer Events](#supported-wavesurfer-events) section below for a list.
  * `un(eventName, callback)` – Unsubscribes from an event.
