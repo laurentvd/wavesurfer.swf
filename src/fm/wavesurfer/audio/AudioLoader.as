@@ -28,7 +28,9 @@ package fm.wavesurfer.audio {
 
 		public function load(url : String) : void {
 			this.url = url;
-			sound.load(new URLRequest(url), new SoundLoaderContext(1000, true));
+
+			var loadPolicyFile : Boolean = true;
+			sound.load(new URLRequest(url), new SoundLoaderContext(1000, loadPolicyFile));
 		}
 
 		private function onSoundLoaded(event : Event) : void {
