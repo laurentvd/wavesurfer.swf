@@ -81,6 +81,10 @@ package fm.wavesurfer.jsapi {
 			return audio.asSimplifiedWaveData(samples / player.getDuration());
 		}
 
+		public function isPlaying() : Boolean {
+			return player.isPlaying();
+		}
+
 		public function playPause() : void {
 			if (player.isPlaying()) {
 				player.pause();
