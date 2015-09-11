@@ -79,6 +79,13 @@
 		/**
 		 *
 		 */
+		isPlaying: function() {
+			this.instance.isPlaying();
+		},
+
+		/**
+		 *
+		 */
 		playPause: function() {
 			this.instance.playPause();
 		},
