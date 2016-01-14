@@ -20,14 +20,22 @@ package fm.wavesurfer.audio {
 		private var url : String;
 
 		public function AudioLoader() {
-			sound = new Sound();
-			sound.addEventListener(Event.COMPLETE, onSoundLoaded);
-			sound.addEventListener(IOErrorEvent.IO_ERROR, onSoundLoadError);
-			sound.addEventListener(ProgressEvent.PROGRESS, onSoundLoadProgress);
+			
 		}
 
 		public function load(url : String) : void {
 			this.url = url;
+
+			if (sound) {
+				sound.removeEventListener(Event.COMPLETE, onSoundLoaded);
+				sound.removeEventListener(IOErrorEvent.IO_ERROR, onSoundLoadError);
+				sound.removeEventListener(ProgressEvent.PROGRESS, onSoundLoadProgress);
+			}
+
+			sound = new Sound();
+			sound.addEventListener(Event.COMPLETE, onSoundLoaded);
+			sound.addEventListener(IOErrorEvent.IO_ERROR, onSoundLoadError);
+			sound.addEventListener(ProgressEvent.PROGRESS, onSoundLoadProgress);
 
 			var loadPolicyFile : Boolean = true;
 			sound.load(new URLRequest(url), new SoundLoaderContext(1000, loadPolicyFile));
