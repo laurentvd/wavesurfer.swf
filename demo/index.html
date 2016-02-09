@@ -17,7 +17,7 @@
 
 <div class="container">
 
-    <div id="wavesurfer"></div>
+    <div id="myWaveSurferId"></div>
 
     <a href="javascript:waveSurferInstance.play();void(0);">Play</a>
     <a href="javascript:waveSurferInstance.pause();void(0);">Pause</a>
@@ -47,12 +47,12 @@
              * We embed the SWF using SWFObject. However, it is not required to use SWFObject.
              * You can use any method to embed the SWF
              */
-            swfobject.embedSWF('../dist/wavesurfer.swf', 'wavesurfer', '100%', '128', '11.1.0', 'expressInstall.swf', {}, {allowScriptAccess: 'always'}, {});
+            swfobject.embedSWF('../dist/wavesurfer.swf', 'myWaveSurferId', '100%', '128', '11.1.0', 'expressInstall.swf', {id: 'myWaveSurferId'}, {allowScriptAccess: 'always'}, {});
 
             /**
              * Wait for the Flash to initialize
              */
-            var waveSurfer = new WaveSurfer.Swf();
+            var waveSurfer = new WaveSurfer.Swf('myWaveSurferId');
             waveSurfer.on('init', function() {
                 onWaveSurferInitialized(waveSurfer);
             });
@@ -76,7 +76,7 @@
                 cursorColor: '#ff0000',
                 cursorWidth: 2,
                 backgroundColor: '#333333', // Only used by Flash
-                container: document.getElementById('wavesurfer') // Only used by js version
+                container: document.getElementById('myWaveSurferId') // Only used by js version
             });
             wavesurfer.on('ready', function() {
                 wavesurfer.play();
