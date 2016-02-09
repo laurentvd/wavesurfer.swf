@@ -14,8 +14,8 @@ lack the required WebAudio support.
 
 ## Requirements
 
-Wavesurfer.swf has no requirements apart from wavesurfer.js! However, we use SWFObject
-the demo to embed the SWF on to the page.
+Wavesurfer.swf has no requirements apart from wavesurfer.js! However, we use SWFObject in
+the demo to embed the SWF.
 
 ## How to use
 
