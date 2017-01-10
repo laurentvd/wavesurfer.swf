@@ -5,3 +5,4 @@ Vagrantfile
 *.swf.stamp
 .DS_Store
 libs/
+.project
