@@ -58,8 +58,8 @@ package fm.wavesurfer.jsapi {
 			return player.getDuration();
 		}
 
-		public function load(url : String) : void {
-			player.load(url);
+		public function load(url : String, waveform : Array = null) : void {
+			player.load(url, waveform);
 		}
 
 		public function pause() : void {

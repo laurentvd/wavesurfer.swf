@@ -40,9 +40,9 @@ package fm.wavesurfer.audio {
 			loader.addEventListener(LoadProgressEvent.TYPE, onAudioLoadProgress);
 		}
 
-		public function load(url : String) : void {
+		public function load(url : String, waveform : Array = null) : void {
 			reset();
-			loader.load(url);
+			loader.load(url, waveform);
 		}
 
 		public function play(startTime : Number = 0) : void {

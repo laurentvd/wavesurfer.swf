@@ -170,8 +170,8 @@
 		/**
 		 * @param {String} url
 		 */
-		load: function(url) {
-			this.instance.load(url);
+		load: function(url, waveform) {
+			this.instance.load(url, waveform);
 		},
 
 		/**

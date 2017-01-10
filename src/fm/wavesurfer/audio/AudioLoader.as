@@ -18,13 +18,15 @@ package fm.wavesurfer.audio {
 		
 		private var sound : Sound;
 		private var url : String;
+		private var waveform : Array;
 
 		public function AudioLoader() {
 			
 		}
 
-		public function load(url : String) : void {
+		public function load(url : String, waveform : Array = null) : void {
 			this.url = url;
+			this.waveform = waveform;
 
 			if (sound) {
 				sound.removeEventListener(Event.COMPLETE, onSoundLoaded);
@@ -42,7 +44,7 @@ package fm.wavesurfer.audio {
 		}
 
 		private function onSoundLoaded(event : Event) : void {
-			var audio : AudioData = new AudioData(sound);
+			var audio : AudioData = new AudioData(sound, waveform);
 			dispatchEvent(new LoadedEvent(audio));
 		}
 
