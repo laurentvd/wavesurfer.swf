@@ -68,7 +68,7 @@ Not all of the wavesurfer.js is currently supported. Below you'll find a list of
  * `getDuration()` – Returns the duration of an audio clip in seconds.
  * `isPlaying()` – Returns true if currently playing, false otherwise.
  * `getId()` – Get the id
- * `load(url)` – Loads audio from URL.
+ * `load(url, [waveformData])` – Loads audio from URL. Optionally you can supply your own waveform data.
  * `on(eventName, callback)` – Subscribes to an event.  See [WaveSurfer Events](#supported-wavesurfer-events) section below for a list.
  * `un(eventName, callback)` – Unsubscribes from an event.
  * `unAll()` – Unsubscribes from all events.
