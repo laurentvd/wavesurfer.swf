@@ -1,6 +1,8 @@
 # wavesurfer.swf
 Flash fallback for wavesurfer.js
 
+> **Note:** This repository is now archived and readonly. No one should use Flash anymore and my knowledge of ActionScript has withered away :)
+
 ## Goal
 
 The purpose of wavesurfer.swf is to bring as many [wavesurfer.js](https://github.com/katspaugh/wavesurfer.js/)
